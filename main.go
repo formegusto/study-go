@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/formegusto/study-go/something"
+	"github.com/formegusto/study-go/variables"
 )
 
 func main() {
 	fmt.Println("Hello World")
-	something.SayHello()
+
+	variables.ConsAndVar()
 }
