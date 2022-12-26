@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/formegusto/study-go/something"
+)
 
 func main() {
-	fmt.Println("Hello Go")	
+	fmt.Println("Hello World")
+	something.SayHello()
 }
