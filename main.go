@@ -1,7 +1,9 @@
 package main
 
-import "github.com/formegusto/study-go/low"
+import (
+	"github.com/formegusto/study-go/strc"
+)
 
 func main() {
-	low.Basic()
+	strc.Basic()
 }
