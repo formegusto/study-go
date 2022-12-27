@@ -2,29 +2,49 @@ package main
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/formegusto/study-go/accounts"
+	"github.com/formegusto/study-go/mydict"
 )
 
+func SearchAndPrint(dictionary mydict.Dictionary, searchWord string) {
+	def, err := dictionary.Search(searchWord)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(def)
+	}
+}
 
 func main() {
-	// account := banking.Account{owner: "forme"}
-	// fmt.Println(account)
+	dictionary := mydict.Dictionary{"first": "First word"}
 
-	account := accounts.NewAccount("forme")
-	fmt.Println(account.Balance())
-	account.Deposit(10)
-	fmt.Println(account.Balance())
-	// err := account.Withdraw(20)
-	err := account.Withdraw(5)
-	if err != nil {
-		log.Fatalln(err)
+	searchWord := "second"
+	SearchAndPrint(dictionary, searchWord)
+
+	word := "second"
+	// addErr := dictionary.Add("first", "Second word")
+	addErr := dictionary.Add(word, "Second word")
+	if addErr != nil {
+		fmt.Println(addErr)
 	}
-	fmt.Println(account.Balance(), account.Owner())
-	fmt.Println(account)
+	SearchAndPrint(dictionary, word)
 
-	// 접근 허용 되지 않음
-	// account.owner = ""
-	// account.balance = 1
+	// badWord := "asfadsfas"
+	updateErr := dictionary.Update(word, "Update Second Word")
+	if updateErr != nil {
+		fmt.Println(updateErr)
+	}
+	SearchAndPrint(dictionary, word)
+
+	// deleteErr := dictionary.Delete(badWord)
+	deleteErr := dictionary.Delete(word)
+	if deleteErr != nil {
+		fmt.Println(deleteErr)
+	}
+	SearchAndPrint(dictionary, word)
+
+
+	// fmt.Println(dictionary["first"])
+	// dictionary["hello"] = "hello"
+	// fmt.Println(dictionary)
 }

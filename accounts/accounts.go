@@ -48,6 +48,9 @@ func (a account) Owner() string {
 	return a.owner
 }
 
+/*
+Python의 __str__과 같은 역할
+*/
 func (a account) String() string {
 	return fmt.Sprint(a.Owner(),"'s account. \nHas: $", a.Balance())
 }
