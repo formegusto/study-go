@@ -1,13 +1,7 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/formegusto/study-go/condition"
-)
+import "github.com/formegusto/study-go/low"
 
 func main() {
-	fmt.Println(condition.CanIDrink(16))
-	fmt.Println(condition.VECanIDrink(16))
-	fmt.Println(condition.SwitchCanIDrink(16))
+	low.Basic()
 }
