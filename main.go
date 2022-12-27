@@ -3,48 +3,32 @@ package main
 import (
 	"fmt"
 
-	"github.com/formegusto/study-go/mydict"
+	"github.com/formegusto/study-go/urlutils"
 )
 
-func SearchAndPrint(dictionary mydict.Dictionary, searchWord string) {
-	def, err := dictionary.Search(searchWord)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(def)
-	}
-}
-
 func main() {
-	dictionary := mydict.Dictionary{"first": "First word"}
-
-	searchWord := "second"
-	SearchAndPrint(dictionary, searchWord)
-
-	word := "second"
-	// addErr := dictionary.Add("first", "Second word")
-	addErr := dictionary.Add(word, "Second word")
-	if addErr != nil {
-		fmt.Println(addErr)
+	var results = make(map[string]string)
+	urls := []string{
+		"https://www.airbnb.com/",
+		"https://www.google.com/",
+		"https://www.amazon.com/",
+		"https://www.reddit.com/",
+		"https://www.google.com/",
+		"https://soundcloud.com/",
+		"https://www.facebook.com/",
+		"https://www.instagram.com/",
+		"https://academy.nomadcoders.co/",
 	}
-	SearchAndPrint(dictionary, word)
-
-	// badWord := "asfadsfas"
-	updateErr := dictionary.Update(word, "Update Second Word")
-	if updateErr != nil {
-		fmt.Println(updateErr)
+	for _,url := range urls {
+		err := urlutils.HitURL(url)
+		if err != nil {
+			results[url] = "failed"
+		} else {
+			results[url] = "success"
+		}
 	}
-	SearchAndPrint(dictionary, word)
 
-	// deleteErr := dictionary.Delete(badWord)
-	deleteErr := dictionary.Delete(word)
-	if deleteErr != nil {
-		fmt.Println(deleteErr)
+	for url, result := range results {
+		fmt.Println(url, ":" , result)
 	}
-	SearchAndPrint(dictionary, word)
-
-
-	// fmt.Println(dictionary["first"])
-	// dictionary["hello"] = "hello"
-	// fmt.Println(dictionary)
 }
