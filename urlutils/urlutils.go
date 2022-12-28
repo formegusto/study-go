@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+type RequestResult struct {
+	Url string
+	Status string
+}
+
 var errRequestFailed = errors.New("Request Failed")
 func HitURL(url string) error {
 	fmt.Println("Checking: ", url)
@@ -14,6 +19,17 @@ func HitURL(url string) error {
 		return errRequestFailed
 	}
 	return nil
+}
+
+// chan<- 이 채널은 보낼 수만 있고 받을 수는 없다.
+func HitURLByGo(url string, c chan<- RequestResult) {
+	fmt.Println("Checking: ", url)
+	res, err := http.Get(url)
+	if err != nil || res.StatusCode >= 400 {
+		c <- RequestResult { Url: url, Status: "FAILED" }
+	} else {
+		c <- RequestResult { Url: url, Status: "OK" }
+	}
 }
 
 func HitURLTest() {
