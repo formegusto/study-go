@@ -12,11 +12,14 @@ func main() {
 	make(chan [type])
 	- 생성된 채널을 Goroutine 실행함수로 보내서 연결시키는 것 이다.
 	*/
-	c := make(chan bool)
+	// c := make(chan bool)
+	c := make(chan string)
 
-	people := [2]string{"forme", "gusto"}
+	// people := [2]string{"forme", "gusto"}
+	people := [5]string{"forme", "gusto", "no", "tae", "heon"}
 	for _, person := range people {
-		go gorout.IsSexy(person, c)
+		// go gorout.IsSexy(person, c)
+		go gorout.IsSexyString(person, c)
 	}
 	// await 같은건데,,
 	// 그니까 같은 채널을 쓰고 있고
@@ -25,8 +28,10 @@ func main() {
 	// 붙는다.
 	// result := <- c
 	// fmt.Println(result)
-	fmt.Println(<-c)
-	fmt.Println(<-c)
+	fmt.Println("Waiting for msg")
+	for i:=0;i<len(people);i++ {
+		fmt.Println("Received this msg", i, ":",<-c)
+	}
 
 	// deadlock!
 	// fmt.Println(<-c)

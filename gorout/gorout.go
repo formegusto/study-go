@@ -20,3 +20,9 @@ func IsSexy(person string, c chan bool) {
 	fmt.Println(person, "---")
 	c <- true
 }
+
+func IsSexyString(person string, c chan string) {
+	time.Sleep(time.Second * 5)
+	
+	c <- person + " is sexy."
+}
