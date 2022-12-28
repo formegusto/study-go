@@ -9,8 +9,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var baseURL string = "https://www.saramin.co.kr/zf_user/search/recruit?searchword=%ED%8C%8C%EC%9D%B4%EC%8D%AC&go=&flag=n&searchMode=1&searchType=search&search_done=y&search_optional_item=n&recruitPage=1&recruitSort=relation&recruitPageCount=40&inner_com_type=&company_cd=0%2C1%2C2%2C3%2C4%2C5%2C6%2C7%2C9%2C10&show_applied=&quick_apply=&except_read=&ai_head_hunting="
-var originalUrl string = "https://www.saramin.co.kr/zf_user/search/recruit?searchword=%ED%8C%8C%EC%9D%B4%EC%8D%AC&go=&flag=n&searchMode=1&searchType=search&search_done=y&search_optional_item=n&recruitSort=relation&recruitPageCount=40&inner_com_type=&company_cd=0%2C1%2C2%2C3%2C4%2C5%2C6%2C7%2C9%2C10&show_applied=&quick_apply=&except_read=&ai_head_hunting="
+var baseURL string = "https://www.saramin.co.kr/zf_user/search/recruit?searchword=%ED%8C%8C%EC%9D%B4%EC%8D%AC&go=&flag=n&searchMode=1&searchType=search&search_done=y&search_optional_item=n&recruitSort=relation&recruitPageCount=40&inner_com_type=&company_cd=0%2C1%2C2%2C3%2C4%2C5%2C6%2C7%2C9%2C10&show_applied=&quick_apply=&except_read=&ai_head_hunting="
 
 func main() {
 	totalPages := getPages()
@@ -22,7 +21,7 @@ func main() {
 }
 
 func getPage(page int) {
-	pageUrl := originalUrl + "&recruitPage=" + strconv.Itoa(page)
+	pageUrl := baseURL + "&recruitPage=" + strconv.Itoa(page)
 	fmt.Println("Requesting", pageUrl)
 }
 
