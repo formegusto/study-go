@@ -26,19 +26,51 @@ var detailURL string = "https://www.saramin.co.kr/zf_user/jobs/relay/view?isMypa
 
 func main() {
 	var jobs []extractedJob
+	c := make(chan []extractedJob)
 
 	totalPages := getPages()
 	fmt.Println(totalPages)
 
 	for i:=1;i<=totalPages;i++ {
+		go getPage(i, c)
+	}
+
+	for i:=1;i<=totalPages;i++ {
 		// [ [] + [] + [] + [] ]
-		extractedJobs := getPage(i)
+		extractedJobs := <- c
 		// 이거 되는 거였어?
 		jobs = append(jobs, extractedJobs...)
 	}
 
 	// fmt.Println(jobs)
 	writingJob(jobs)
+}
+
+func getPage(page int, mainC chan<- []extractedJob) {
+	var jobs []extractedJob
+	c := make(chan extractedJob)
+
+	pageUrl := baseURL + "&recruitPage=" + strconv.Itoa(page)
+	fmt.Println("Requesting", pageUrl)
+
+	resp, err := http.Get(pageUrl)
+	checkErr(err)
+	checkCode(resp)
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	checkErr(err)
+
+	searchCards  := doc.Find("div.item_recruit")
+	searchCards.Each(func(i int, card *goquery.Selection) {
+		go extractJob(card, c)
+	})
+
+	for i:=0;i<searchCards.Length();i++ {
+		job := <-c 
+		jobs = append(jobs, job)
+	}
+
+	mainC <- jobs
 }
 
 func writingJob(jobs []extractedJob) {
@@ -62,35 +94,13 @@ func writingJob(jobs []extractedJob) {
 	fmt.Println("Done, extracted", len(jobs), )
 }
 
-func getPage(page int) []extractedJob {
-	var jobs []extractedJob
-
-	pageUrl := baseURL + "&recruitPage=" + strconv.Itoa(page)
-	fmt.Println("Requesting", pageUrl)
-
-	resp, err := http.Get(pageUrl)
-	checkErr(err)
-	checkCode(resp)
-
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-	checkErr(err)
-
-	searchCards  := doc.Find("div.item_recruit")
-	searchCards.Each(func(i int, card *goquery.Selection) {
-		job := extractJob(card)
-		jobs = append(jobs, job)
-	})
-
-	return jobs
-}
-
-func extractJob(card *goquery.Selection) extractedJob {
+func extractJob(card *goquery.Selection, c chan<- extractedJob) {
 	id, _ := card.Attr("value")
 	title := cleanString(card.Find("h2.job_tit span").Text())
 	location := cleanString(card.Find("div.job_condition span:nth-child(1)").Text())
 	salary := cleanString(card.Find("div.job_condition span:nth-child(5)").Text())
 	stack := cleanString(card.Find("div.job_sector").Text())
-	return extractedJob{
+	c <- extractedJob{
 		id: detailURL + "&rec_idx=" + id + "#seq=0", 
 		title: title, 
 		location: location, 
